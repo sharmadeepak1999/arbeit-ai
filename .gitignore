@@ -1,0 +1,55 @@
+# Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+venv/
+env/
+
+# Streamlit specific
+.streamlit/
+
+# Environment variables file
+.env
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Log files
+*.log
+
+# Database files
+*.sqlite3
+
+# Compiled C extensions
+*.so
+
+# Backup files
+*~
+
+# .env file for storing API keys or other sensitive data
+.env
+
+# Specific to any deployment, like Docker
+Dockerfile
+docker-compose.yml
+
+# Pytest specific
+.cache/
+
+# Coverage reports
+.coverage
+.coverage.*
+
+# PyCharm specific
+.idea/
+
+# VS Code specific
+.vscode/
+
+# MacOS specific
+.DS_Store
