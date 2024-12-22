@@ -9,4 +9,5 @@ load_dotenv()
 llm = ChatTogether(
     together_api_key=os.getenv("TOGETHER_API_KEY"),
     model=os.getenv("TOGETHER_MODEL"),
+    temperature=0.5
 )
