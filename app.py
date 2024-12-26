@@ -41,22 +41,34 @@ def process_input(job_posting_text, resume_text):
 
     return job_details, resume_details, comparison_results
 
-# Function to generate content based on selected templates
 def generate_application_content(selected_application_types, custom_templates, cover_letter_template_names, cover_letter_templates, job_details, resume_details, referral_template, connection_note_template):
     job_application_email = ""
     referral_message = ""
     connection_note = ""
 
+    # Handle Cover Letter Generation
     if "Cover Letter" in selected_application_types:
         selected_cover_letter_template = "Custom Cover Letter" if custom_templates.get("cover_letter") else cover_letter_template_names[0]
         selected_template = custom_templates.get("cover_letter") or next(template for template in cover_letter_templates if template["name"] == selected_cover_letter_template)["template"]
         job_application_email += generate_job_application_email_dynamic(selected_template, resume_details, job_details) + "\n\n"
 
+    # Handle Referral Message Generation
     if "Referral Message" in selected_application_types:
-        referral_message = custom_templates.get("referral", "") or generate_job_referral_dynamic(referral_template, resume_details, job_details)
+        if custom_templates.get("referral"):
+            # If a custom referral message is provided, use it along with the predefined template for structure
+            referral_message = generate_job_referral_dynamic(custom_templates.get("referral"), resume_details, job_details)
+        else:
+            # Otherwise, use the default referral template
+            referral_message = generate_job_referral_dynamic(referral_template, resume_details, job_details)
 
+    # Handle LinkedIn Connection Request Note Generation
     if "LinkedIn Connection Request Note" in selected_application_types:
-        connection_note = custom_templates.get("connection_note", "") or generate_connection_note_dynamic(connection_note_template, resume_details, job_details)
+        if custom_templates.get("connection_note"):
+            # If a custom connection note is provided, use it along with the predefined template for structure
+            connection_note = generate_connection_note_dynamic(custom_templates.get("connection_note"), resume_details, job_details)
+        else:
+            # Otherwise, use the default connection note template
+            connection_note = generate_connection_note_dynamic(connection_note_template, resume_details, job_details)
 
     return job_application_email, referral_message, connection_note
 
@@ -111,9 +123,9 @@ def main():
 
         # Custom templates section
         with st.expander("Enter Custom Templates", expanded=False):
-            custom_cover_letter = st.text_area("Custom Cover Letter Template", height=150, value=custom_templates.get("cover_letter", ""))
-            custom_referral = st.text_area("Custom Referral Message Template", height=150, value=custom_templates.get("referral", ""))
-            custom_connection_note = st.text_area("Custom Connection Note Template", height=150, value=custom_templates.get("connection_note", ""))
+            custom_cover_letter = st.text_area("Cover Letter Template", height=150, value=custom_templates.get("cover_letter", ""))
+            custom_referral = st.text_area("Referral Message Template", height=150, value=custom_templates.get("referral", ""))
+            custom_connection_note = st.text_area("Connection Note Template", height=150, value=custom_templates.get("connection_note", ""))
             save_button = st.button("Save")
 
             if save_button:
@@ -141,6 +153,14 @@ def main():
                     color: #888888;
                     font-size: 18px;
                     width: 100%;
+                    margin-top: 20%;
+                }
+                .result-box {
+                    background-color: #f4f4f4;
+                    padding: 20px;
+                    border-radius: 8px;
+                    margin-bottom: 20px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 }
             </style>
         """, unsafe_allow_html=True)
@@ -166,16 +186,18 @@ def main():
                         missing_keywords = comparison_results.get('missing_keywords', [])
                         st.text(f"✅ Matching Score: {matching_score}/100\n\n❌ Missing Skills: {', '.join(missing_skills) if missing_skills else 'None'}\n\n❌ Missing Keywords: {', '.join(missing_keywords) if missing_keywords else 'None'}\n")
 
-                        # Show generated content
+                        # Show generated content in code blocks for copy functionality
                         if job_application_email:
                             st.subheader("📧 Generated Job Application Email")
-                            st.text(job_application_email)
+                            st.code(job_application_email, language='text')
+
                         if referral_message:
-                            st.subheader("🔗 Generated Referral Message")
-                            st.text(referral_message)
+                            st.subheader("👥 Generated Referral Message")
+                            st.code(referral_message, language='text')
+
                         if connection_note:
-                            st.subheader("🔗 Generated LinkedIn Connection Note")
-                            st.text(connection_note)
+                            st.subheader("✍🏻 Generated LinkedIn Connection Note")
+                            st.code(connection_note, language='text')
 
                         # Store inputs in cookies after processing
                         controller.set("job_posting_text", job_posting_text)
