@@ -1,4 +1,4 @@
 streamlit
 python-dotenv
 langchain_together
-streamlit-cookies-controller
+streamlit_local_storage

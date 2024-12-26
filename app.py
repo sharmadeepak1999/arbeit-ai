@@ -8,7 +8,7 @@ from services.email_service import generate_job_application_email_dynamic
 from services.referral_service import generate_job_referral_dynamic
 from services.connection_note_service import generate_connection_note_dynamic
 from utils.json_template_loader import load_templates
-from streamlit_cookies_controller import CookieController
+from streamlit_local_storage import LocalStorage
 
 # Function to load templates
 def load_letter_templates():
@@ -90,12 +90,12 @@ def main():
     # Create two columns for input and results
     input_col, results_col = st.columns([1, 2])
 
-    controller = CookieController()
-
+    controller = LocalStorage()
+    
     # Initialize cookie manager for storing inputs
-    job_posting_text = controller.get("job_posting_text") or ""
-    resume_text = controller.get("resume_text") or ""
-    custom_templates = controller.get("custom_templates") or {}
+    job_posting_text = controller.getItem("job_posting_text") or ""
+    resume_text = controller.getItem("resume_text") or ""
+    custom_templates = controller.getItem("custom_templates") or {}
 
     # Input fields for job description and resume text
     with input_col:
@@ -133,7 +133,7 @@ def main():
                 custom_templates["referral"] = custom_referral if custom_referral else ""
                 custom_templates["connection_note"] = custom_connection_note if custom_connection_note else ""
                 st.success("Custom templates saved successfully!")
-                controller.set("custom_templates", custom_templates)
+                controller.setItem("custom_templates", custom_templates, key="custom_templates")
                 time.sleep(2)
                 st.rerun()
 
@@ -200,8 +200,8 @@ def main():
                             st.code(connection_note, language='text')
 
                         # Store inputs in cookies after processing
-                        controller.set("job_posting_text", job_posting_text)
-                        controller.set("resume_text", resume_text)
+                        controller.setItem("job_posting_text", job_posting_text, key="job_posting_text")
+                        controller.setItem("resume_text", resume_text, key="resume_text")
                     else:
                         placeholder.markdown('<div class="centered">📝 Error in processing the inputs, please check the text format.</div>', unsafe_allow_html=True)
             else:
