@@ -16,9 +16,13 @@ def compare_resume_and_job_description(resume_json, job_json):
     - Compare the skills and keywords between the resume and job description.
     - Calculate a matching score out of 100, reflecting how well the resume matches the job description.
     - Identify the skills and keywords from the job description that are missing in the resume.
-    - Consider variations in skill/keyword names (e.g., "JavaScript" vs "JS") and treat them as matches.
-
-    {{"matching_score": <matching_score_out_of_100>, "missing_skills": <list_of_skills_missing_in_resume>, "missing_keywords": <list_of_keywords_missing_in_resume>}}
+    - Consider variations in skill/keyword names (e.g., "JavaScript" vs "JS", "AWS" vs "Amazon Web Services") and treat them as matches.
+    - The matching score should account for exact matches, partial matches (such as abbreviations or synonyms), and the overall relevance of the skills in the context of the job description.
+    
+    The response should contain:
+    - "matching_score": <matching_score_out_of_100>
+    - "missing_skills": <list_of_skills_missing_in_resume>
+    - "missing_keywords": <list_of_keywords_missing_in_resume>
     """
 
     response = llm.invoke(input=prompt)

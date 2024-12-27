@@ -76,12 +76,12 @@ def generate_application_content(selected_application_types, custom_templates, c
 def main():
     # Set page title and layout
     st.set_page_config(
-        page_title="Jobingo - Your AI Job Application Assistant",
-        page_icon="📄",
+        page_title="Arbeit AI - Job Application Assistant",
+        page_icon="🤖",
         layout="wide"
     )
 
-    st.title("🤖 Jobingo")
+    st.title("🤖 Arbeit AI")
 
     # Load templates
     cover_letter_templates, cover_letter_template_names = load_letter_templates()
@@ -105,8 +105,7 @@ def main():
         # Application type selection
         selected_application_types = st.multiselect(
             "Choose Application Types",
-            options=["Cover Letter", "Referral Message", "LinkedIn Connection Request Note"],
-            default=["Cover Letter"]
+            options=["Cover Letter", "Referral Message", "LinkedIn Connection Request Note"]
         )
 
         # Cover letter template selection
